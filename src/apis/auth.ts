@@ -84,8 +84,6 @@ export const authApis = {
     const accessToken = await getCookie('accessToken');
     const refreshToken = await getCookie('refreshToken');
 
-    const cookieHeader = [`accessToken=${accessToken}`, `refreshToken=${refreshToken}`].join('; ');
-
     try {
       const response = await axios.post(
         `${process.env.NEXT_PUBLIC_API_BASE_URL}${apiPaths.auth.refreshToken.slice(1)}`,
@@ -94,7 +92,7 @@ export const authApis = {
           method: 'POST',
           headers: {
             Authorization: `Bearer ${accessToken}`,
-            Cookie: cookieHeader,
+            Cookie: `refreshToken=${refreshToken};`,
           },
           withCredentials: true,
         }
@@ -102,6 +100,7 @@ export const authApis = {
 
       return response;
     } catch (error) {
+      console.log(error);
       if (axios.isAxiosError(error) && error.response) {
         const {
           status,
