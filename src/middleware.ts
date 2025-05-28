@@ -32,6 +32,9 @@ export const middleware = async (request: NextRequest) => {
   };
 
   const redirectToRefer = () => {
+    if (pathname.startsWith('/login/oauth2')) {
+      return NextResponse.next();
+    }
     const url = new URL(refer ?? '/', request.url);
     url.searchParams.set('date', now.toString());
     return NextResponse.redirect(url);
